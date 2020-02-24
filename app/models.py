@@ -22,20 +22,31 @@ class SocietyDetails(db.Model):
 
 class BuildingDetails(db.Model):
     building_id = db.Column(db.Integer, primary_key=True)
-    society_id = db.Column(db.Integer, foreign_key=True)
+    # society_id = db.Column(db.Integer, db.ForeignKey('SocietyDetails.society_id'), nullable=False)
+    number_of_floors = db.Column(db.Integer)
+    number_of_flats = db.Column(db.Integer)
+    total_flats = db.Column(db.Integer)
+
+
+class ApartmentDetails(db.Model):
+    apartment_id = db.Column(db.Integer, primary_key=True)
+    # society_id = db.Column(db.Integer, db.ForeignKey('SocietyDetails.society_id'), nullable=False)
+    number_of_wings = db.Column(db.Integer)
     number_of_floors = db.Column(db.Integer)
     number_of_flats = db.Column(db.Integer)
     total_flats = db.Column(db.Integer)
 
 
 class ManagementContactInfo(db.Model):
-    
+    management_id = db.Column(db.Integer, primary_key=True)
+    # society_id = db.Column(db.Integer, db.ForeignKey('SocietyDetails.society_id'), nullable=False)
     name = db.Column(db.String())
     contact = db.Column(db.String())
     email_id = db.Column(db.String())
 
 
 # class AdditionalInfo(db.Model):
+#     management_id = db.Column(db.Integer, db.ForeignKey('ManagementContactInfo.management_id'), nullable=False)
 #     has_lift = db.Column(db.String())
 #     lift_capacity = db.Column(db.Integer)
 #     has_parking = db.Column(db.String())
