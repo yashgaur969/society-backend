@@ -1,4 +1,5 @@
 from flask import Flask
+
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -13,5 +14,7 @@ migrate = Migrate(app, db)
 
 # app.config['JWT_SECRET_KEY'] = 'sdfjbpsibvaebfbh'
 jwt = JWTManager(app)
+
+
 
 from app import routes, models

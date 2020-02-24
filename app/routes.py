@@ -3,7 +3,7 @@ from os import abort
 from flask import request
 
 from app import app, db
-from app.models import User
+from app.models import User, AccessTokenTable
 from flask_jwt_extended import create_access_token
 
 @app.route('/hello-world')
@@ -38,9 +38,21 @@ def login():
             return 'user with email {} does not exist'.format(email_id)
         if password == user.password:
             access_token = create_access_token(identity=user.email_id)
+            access = AccessTokenTable(access_token=access_token)
+            db.session.add(access)
+            db.session.commit()
             return {
                 'message': 'Logged in as {}'.format(user.email_id),
                 'access_token': access_token
             }
         else:
             return 'wrong credentials'
+
+
+@app.route('/users/logout/<access_token>', methods=['DELETE'])
+def logout(access_token):
+    if request.method == 'DELETE':
+        access = AccessTokenTable.query.filter_by(access_token=access_token).delete()
+        db.session.commit()
+        return 'user successfully logout'
+
