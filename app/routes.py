@@ -6,6 +6,7 @@ from app import app, db
 from app.models import User, AccessTokenTable
 from flask_jwt_extended import create_access_token
 
+
 @app.route('/hello-world')
 def hello_world():
     return "hello world"
@@ -28,9 +29,9 @@ def new_user():
         return 'created new user {} with email {} '.format(user.first_name, user.email_id)
 
 
-@app.route('/users/login', methods=['GET'])
+@app.route('/users/login', methods=['POST'])
 def login():
-    if request.method == 'GET':
+    if request.method == 'POST':
         email_id = request.json.get('email_id')
         password = request.json.get('password')
         user = User.query.filter_by(email_id=email_id).first()
@@ -55,4 +56,3 @@ def logout(access_token):
         access = AccessTokenTable.query.filter_by(access_token=access_token).delete()
         db.session.commit()
         return 'user successfully logout'
-
