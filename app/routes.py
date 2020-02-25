@@ -3,7 +3,7 @@ from os import abort
 from flask import request
 
 from app import app, db
-from app.models import User, AccessTokenTable
+from app.models import User, AccessTokenTable, Society, Building, Apartment, Management
 from flask_jwt_extended import create_access_token
 
 
@@ -56,3 +56,55 @@ def logout(access_token):
         AccessTokenTable.query.filter_by(access_token=access_token).delete()
         db.session.commit()
         return 'user successfully logout'
+
+
+@app.route('/societyDetails', methods=['POST'])
+def society_details():
+    if request.method == 'POST':
+        society_type = request.json.get('society_type')
+        is_fenced = request.json.get('is_fenced')
+        is_guarded = request.json.get('is_guarded')
+        new_society = Society(society_type=society_type, is_fenced=is_fenced, is_guarded=is_guarded)
+        db.session.add(new_society)
+        db.session.commit()
+        return 'new society with given specifications is made'
+
+
+@app.route('/buildingDetails', methods=['POST'])
+def building_details():
+    if request.method == 'POST':
+        number_of_floors = request.json.get('number_of_floors')
+        number_of_flats = request.json.get('number_of_flats')
+        total_flats = int(number_of_flats)*int(number_of_floors)
+        new_building = Building(number_of_floors=number_of_floors, number_of_flats=number_of_flats, total_flats=total_flats)
+        db.session.add(new_building)
+        db.session.commit()
+        return 'new building with given specifications is made'
+
+
+@app.route('/apartmentDetails', methods=['POST'])
+def apartment_details():
+    if request.method == 'POST':
+        no_of_wings = request.json.get('no_of_wings')
+        no_of_floors = request.json.get('no_of_floors')
+        no_of_flats = request.json.get('no_of_flats')
+        total_flats = int(no_of_flats) * int(no_of_floors)*int(no_of_wings)
+        new_apartment = Apartment(number_of_wings=no_of_wings, number_of_floors=no_of_floors, number_of_flats=no_of_flats, total_flats=total_flats)
+        db.session.add(new_apartment)
+        db.session.commit()
+        return 'new apartment with given specifications is made'
+
+
+@app.route('/managementDetails', methods=['POST'])
+def management_details():
+    if request.method == 'POST':
+        name = request.json.get('name')
+        contact = request.json.get('contact')
+        email_id = request.json.get('email_id')
+        new_manager = Management(name=name, contact=contact, email_id=email_id)
+        db.session.add(new_manager)
+        db.session.commit()
+        return 'new manager with given details is made'
+
+
+

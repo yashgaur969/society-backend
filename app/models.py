@@ -15,7 +15,7 @@ class AccessTokenTable(db.Model):
 
 class Society(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    management_id = db.Column(db.Integer, db.ForeignKey('management.id'), nullable=False)
+    management_id = db.Column(db.Integer, db.ForeignKey('management.id'))
     society_type = db.Column(db.String())
     is_fenced = db.Column(db.String())
     is_guarded = db.Column(db.String())
@@ -28,7 +28,7 @@ class Building(db.Model):
     number_of_floors = db.Column(db.Integer)
     number_of_flats = db.Column(db.Integer)
     total_flats = db.Column(db.Integer)
-    society_id = db.Column(db.Integer, db.ForeignKey('society.id'), nullable=False)
+    society_id = db.Column(db.Integer, db.ForeignKey('society.id'))
 
 
 #
@@ -38,7 +38,7 @@ class Apartment(db.Model):
     number_of_floors = db.Column(db.Integer)
     number_of_flats = db.Column(db.Integer)
     total_flats = db.Column(db.Integer)
-    society_id = db.Column(db.Integer, db.ForeignKey('society.id'), nullable=False)
+    society_id = db.Column(db.Integer, db.ForeignKey('society.id'))
 
 
 class Management(db.Model):
