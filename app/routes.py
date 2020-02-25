@@ -53,6 +53,6 @@ def login():
 @app.route('/users/logout/<access_token>', methods=['DELETE'])
 def logout(access_token):
     if request.method == 'DELETE':
-        access = AccessTokenTable.query.filter_by(access_token=access_token).delete()
+        AccessTokenTable.query.filter_by(access_token=access_token).delete()
         db.session.commit()
         return 'user successfully logout'
