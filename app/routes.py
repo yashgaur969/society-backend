@@ -58,7 +58,7 @@ def logout(access_token):
         return 'user successfully logout'
 
 
-@app.route('/societyDetails', methods=['POST'])
+@app.route('/societyDetails', methods=['POST', 'GET'])
 def society_details():
     if request.method == 'POST':
         society_type = request.json.get('society_type')
@@ -69,14 +69,26 @@ def society_details():
         db.session.commit()
         return 'new society with given specifications is made'
 
+    if request.method == 'GET':
+        society_list = {}
+        society = Society.query.all()                         # dictionary of all society rows
+        society_object = [{"society_type": s.society_type,"is_fenced": s.is_fenced,"is_guarded": s.is_guarded} for s in society ]
+        print(society_object)
+        for s in society:
+            society_list.update({s.id: {"society_type": s.society_type,
+                                        "is_fenced": s.is_fenced,
+                                        "is_guarded": s.is_guarded}})
+        return {'data':society_object}
+
 
 @app.route('/buildingDetails', methods=['POST'])
 def building_details():
     if request.method == 'POST':
         number_of_floors = request.json.get('number_of_floors')
         number_of_flats = request.json.get('number_of_flats')
-        total_flats = int(number_of_flats)*int(number_of_floors)
-        new_building = Building(number_of_floors=number_of_floors, number_of_flats=number_of_flats, total_flats=total_flats)
+        total_flats = int(number_of_flats) * int(number_of_floors)
+        new_building = Building(number_of_floors=number_of_floors, number_of_flats=number_of_flats,
+                                total_flats=total_flats)
         db.session.add(new_building)
         db.session.commit()
         return 'new building with given specifications is made'
@@ -88,8 +100,9 @@ def apartment_details():
         no_of_wings = request.json.get('no_of_wings')
         no_of_floors = request.json.get('no_of_floors')
         no_of_flats = request.json.get('no_of_flats')
-        total_flats = int(no_of_flats) * int(no_of_floors)*int(no_of_wings)
-        new_apartment = Apartment(number_of_wings=no_of_wings, number_of_floors=no_of_floors, number_of_flats=no_of_flats, total_flats=total_flats)
+        total_flats = int(no_of_flats) * int(no_of_floors) * int(no_of_wings)
+        new_apartment = Apartment(number_of_wings=no_of_wings, number_of_floors=no_of_floors,
+                                  number_of_flats=no_of_flats, total_flats=total_flats)
         db.session.add(new_apartment)
         db.session.commit()
         return 'new apartment with given specifications is made'
@@ -104,7 +117,4 @@ def management_details():
         new_manager = Management(name=name, contact=contact, email_id=email_id)
         db.session.add(new_manager)
         db.session.commit()
-        return 'new manager with given details is made'
-
-
-
+        return 'new manager with given details; is made'
