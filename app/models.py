@@ -49,13 +49,3 @@ class Management(db.Model):
     societies = db.relationship('Society', backref='society', lazy=True)
 
 
-# class AdditionalInfo(db.Model):
-#     management_id = db.Column(db.Integer, db.ForeignKey('ManagementContactInfo.management_id'), nullable=False)
-#     has_lift = db.Column(db.String())
-#     lift_capacity = db.Column(db.Integer)
-#     has_parking = db.Column(db.String())
-#     has_any_restriction = db.Column(db.String())
-#     restriction_start_time = db.Column(db.String())
-#     restriction_end_time = db.Column(db.String())
-#     entry_validation = db.Column(db.String())
-#     amenities = db.Column(db.String())
