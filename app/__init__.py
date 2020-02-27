@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
-from app import routes, models
+
 
 app = Flask(__name__)
 app.debug = True
@@ -17,3 +17,4 @@ migrate = Migrate(app, db)
 jwt = JWTManager(app)
 mail = Mail(app)
 
+from app import routes, models
