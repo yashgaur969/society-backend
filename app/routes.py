@@ -1,7 +1,8 @@
 from os import abort
 
 from flask import request
-
+from flask_mail import Message
+from .reset_password import ForgotPassword, ResetPassword
 from app import app, db
 from app.models import User, AccessTokenTable, Society, Building, Apartment, Management
 from flask_jwt_extended import create_access_token
@@ -73,11 +74,7 @@ def society_details():
         society_list = {}
         society = Society.query.all()                         # dictionary of all society rows
         society_object = [{"society_type": s.society_type,"is_fenced": s.is_fenced,"is_guarded": s.is_guarded} for s in society ]
-        print(society_object)
-        for s in society:
-            society_list.update({s.id: {"society_type": s.society_type,
-                                        "is_fenced": s.is_fenced,
-                                        "is_guarded": s.is_guarded}})
+
         return {'data':society_object}
 
 
@@ -118,3 +115,4 @@ def management_details():
         db.session.add(new_manager)
         db.session.commit()
         return 'new manager with given details; is made'
+
