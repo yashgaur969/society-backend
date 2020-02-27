@@ -1,10 +1,8 @@
 from os import abort
-
 from flask import request
-
+from flask_jwt_extended import create_access_token
 from app import app, db
 from app.models import User, AccessTokenTable, Society, Building, Apartment, Management
-from flask_jwt_extended import create_access_token
 
 
 @app.route('/hello-world')
@@ -19,11 +17,12 @@ def new_user():
         last_name = request.json.get('last_name')
         email_id = request.json.get('email_id')
         password = request.json.get('password')
-        # if first_name is None or password is None:
-        #     abort()  # missing arguments
-        # if User.query.filter_by(first_name=first_name).first() is not None:
-        #     abort()  # existing user
-        user = User(first_name=first_name, last_name=last_name, email_id=email_id, password=password)
+        if first_name is None or password is None or email_id is None:
+            abort()
+        if User.query.filter_by(first_name=first_name).first() is not None:
+            abort()
+        user = User(first_name=first_name, last_name=last_name,
+                    email_id=email_id, password=password)
         db.session.add(user)
         db.session.commit()
         return 'created new user {} with email {} '.format(user.first_name, user.email_id)
@@ -70,11 +69,10 @@ def society_details():
         return 'new society with given specifications is made'
 
     if request.method == 'GET':
-        society_list = {}
-        society = Society.query.all()                         # dictionary of all society rows
-        society_object = [{"society_type": s.society_type,"is_fenced": s.is_fenced,"is_guarded": s.is_guarded} for s in society ]
-
-        return {'data':society_object}
+        society = Society.query.all()
+        society_object = [{"society_type": s.society_type, "is_fenced": s.is_fenced,
+                           "is_guarded": s.is_guarded} for s in society]
+        return {'data': society_object}
 
 
 @app.route('/buildingDetails', methods=['POST'])
@@ -114,4 +112,3 @@ def management_details():
         db.session.add(new_manager)
         db.session.commit()
         return 'new manager with given details; is made'
-

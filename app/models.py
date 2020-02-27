@@ -47,5 +47,3 @@ class Management(db.Model):
     contact = db.Column(db.String())
     email_id = db.Column(db.String())
     societies = db.relationship('Society', backref='society', lazy=True)
-
-
